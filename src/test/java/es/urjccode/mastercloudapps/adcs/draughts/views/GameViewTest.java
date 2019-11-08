@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import es.urjccode.mastercloudapps.adcs.draughts.models.Game;
+import es.urjccode.mastercloudapps.adcs.draughts.models.State;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +21,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import es.urjccode.mastercloudapps.adcs.draughts.controllers.StartController;
-import es.urjccode.mastercloudapps.adcs.draughts.models.Session;
 import es.urjccode.mastercloudapps.adcs.draughts.utils.Console;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -38,10 +39,10 @@ public class GameViewTest {
 
     @Captor
     ArgumentCaptor<String> argument;
-    
+
     @Test
     public void testInteract(){
-        StartController startController = new StartController(new Session());
+        StartController startController = new StartController(new Game(), new State());
         this.gameView.write(startController);
         verify(console, times(90)).write(argument.capture());
         List<String> rows = Arrays.asList(
