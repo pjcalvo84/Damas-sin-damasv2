@@ -13,9 +13,9 @@ public class StartControllerTest {
     public void givenStartControllerWhenStartGameThenChangeState() {
         Session session = new Session();
         StartController startController = new StartController(session);
-        assertEquals(StateValue.INITIAL, session.getValueState());
+        assertEquals(StateValue.INITIAL, session.state.getValueState());
         startController.start();
-        assertEquals(StateValue.IN_GAME, session.getValueState());
+        assertEquals(StateValue.IN_GAME, session.state.getValueState());
     }
 
 }

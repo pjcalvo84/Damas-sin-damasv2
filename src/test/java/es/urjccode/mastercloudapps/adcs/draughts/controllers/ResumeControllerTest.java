@@ -13,26 +13,26 @@ public class ResumeControllerTest {
     public void givenResumeControllerWhenResumeGameMoveToInitialStateRequiereCorrectThenNotError() {
         Session session= new Session();
         ResumeController resumeController = new ResumeController(session);
-        assertEquals(StateValue.INITIAL, session.getValueState());
+        assertEquals(StateValue.INITIAL, session.state.getValueState());
         resumeController.next();
-        assertEquals(StateValue.IN_GAME, session.getValueState());
+        assertEquals(StateValue.IN_GAME, session.state.getValueState());
         resumeController.next();
-        assertEquals(StateValue.FINAL, session.getValueState());
+        assertEquals(StateValue.FINAL, session.state.getValueState());
         resumeController.reset();
-        assertEquals(StateValue.INITIAL, session.getValueState());
+        assertEquals(StateValue.INITIAL, session.state.getValueState());
     }
 
     @Test(expected = AssertionError.class)
     public void givenResumeControllerWhenResumeGameMoveOutThenError() {
         Session session= new Session();
         ResumeController resumeController = new ResumeController(session);
-        assertEquals(StateValue.INITIAL, session.getValueState());
+        assertEquals(StateValue.INITIAL, session.state.getValueState());
         resumeController.next();
-        assertEquals(StateValue.IN_GAME, session.getValueState());
+        assertEquals(StateValue.IN_GAME, session.state.getValueState());
         resumeController.next();
-        assertEquals(StateValue.FINAL, session.getValueState());
+        assertEquals(StateValue.FINAL, session.state.getValueState());
         resumeController.next();
-        assertEquals(StateValue.EXIT, session.getValueState());
+        assertEquals(StateValue.EXIT, session.state.getValueState());
         resumeController.next();
     }
 }

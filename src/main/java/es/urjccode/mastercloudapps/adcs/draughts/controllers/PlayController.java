@@ -13,24 +13,24 @@ public class PlayController extends Controller {
 	}
 
 	public Error move(Coordinate origin, Coordinate target){
-		Error error = this.session.move(origin, target);
-		if (this.session.isBlocked()){
-			this.session.next();
+		Error error = this.session.game.move(origin, target);
+		if (this.session.game.isBlocked()){
+			this.session.state.next();
 		}
 		return error;
     }
 
 	public Piece getPiece(Coordinate coordinate) {
-		return session.getPiece(coordinate);
+		return session.game.getPiece(coordinate);
 	}
 
 	public Color getColor() {
-		return session.getColor();
+		return session.game.getColor();
 	}
-	
+
 	public boolean isBlocked() {
-		return session.isBlocked();
-	}	
+		return session.game.isBlocked();
+	}
 
 	@Override
 	public void accept(ControllersVisitor controllersVisitor) {

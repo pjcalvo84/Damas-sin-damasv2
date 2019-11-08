@@ -2,9 +2,9 @@ package es.urjccode.mastercloudapps.adcs.draughts.models;
 
 public class Session {
 
-	private State state;
+	public State state;
 
-	private Game game;
+	public Game game;
 
 	public Session(){
 		this.state = new State();

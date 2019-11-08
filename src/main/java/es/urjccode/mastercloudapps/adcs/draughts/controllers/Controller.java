@@ -13,13 +13,13 @@ public abstract class Controller {
     }
 
     public Color getColor(Coordinate coordinate) {
-		return this.session.getColor(coordinate);
+		return this.session.game.getColor(coordinate);
 	}
 
 	public int getDimension() {
-		return this.session.getDimension();
+		return this.session.game.getDimension();
 	}
 
 	abstract public void accept(ControllersVisitor controllersVisitor);
-    
+
 }
