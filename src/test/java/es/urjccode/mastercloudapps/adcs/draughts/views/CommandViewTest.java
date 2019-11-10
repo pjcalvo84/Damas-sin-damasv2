@@ -40,39 +40,39 @@ public class CommandViewTest {
         when(playController.getColor()).thenReturn(Color.BLACK);
         when(console.readString("Mueven las negras: ")).thenReturn("32.41\n");
         commandView.interact(playController);
-        verify(playController).move(new Coordinate(3,2), new Coordinate(4, 1));
+        verify(playController).move(new Coordinate(2,1), new Coordinate(3, 0));
     }
 
     @Test
     public void testInteractWithWrongCoordinateSize(){
         when(playController.getColor()).thenReturn(Color.BLACK);
-        when(console.readString("Mueven las negras: ")).thenReturn("47.38").thenReturn("21.30\n");
+        when(console.readString("Mueven las negras: ")).thenReturn("47.39").thenReturn("21.32\n");
         commandView.interact(playController);
-        verify(console).write("Error!!!OUT_COORDINATE");
+        verify(console).writeln("Error!!!OUT_COORDINATE");
     }
 
     @Test
     public void testInteractWithWorngEntry(){
         when(playController.getColor()).thenReturn(Color.BLACK);
-        when(console.readString("Mueven las negras: ")).thenReturn("JKDC").thenReturn("21.30\n");
+        when(console.readString("Mueven las negras: ")).thenReturn("JKDC").thenReturn("21.32\n");
         commandView.interact(playController);
-        verify(console).write("Error!!!WRONG_FORMAT");
+        verify(console).writeln("Error!!!WRONG_FORMAT");
     }
 
     @Test
     public void testInteractWithWorngEntrySize(){
         when(playController.getColor()).thenReturn(Color.BLACK);
-        when(console.readString("Mueven las negras: ")).thenReturn("21.30.42").thenReturn("21.30\n");
+        when(console.readString("Mueven las negras: ")).thenReturn("21.32.42").thenReturn("21.32\n");
         commandView.interact(playController);
-        verify(console).write("Error!!!WRONG_FORMAT");
+        verify(console).writeln("Error!!!WRONG_FORMAT");
     }
 
     @Test
     public void testInteractWithBlackColor(){
         when(playController.getColor()).thenReturn(Color.BLACK);
-        when(console.readString("Mueven las negras: ")).thenReturn("21.30\n");
+        when(console.readString("Mueven las negras: ")).thenReturn("21.32\n");
         commandView.interact(playController);
-        verify(playController).move(new Coordinate(2, 1), new Coordinate(3, 0));
+        verify(playController).move(new Coordinate(1, 0), new Coordinate(2, 1));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class CommandViewTest {
         when(playController.getColor()).thenReturn(Color.WHITE);
         when(console.readString("Mueven las blancas: ")).thenReturn("61.52\n");
         commandView.interact(playController);
-        verify(playController).move(new Coordinate(6, 1), new Coordinate(5, 2));
+        verify(playController).move(new Coordinate(5, 0), new Coordinate(4, 1));
     }
 
 }

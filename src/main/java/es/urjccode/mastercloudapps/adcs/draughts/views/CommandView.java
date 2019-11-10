@@ -19,13 +19,13 @@ public class CommandView extends SubView {
         Error error = null;
         GameView gameView = new GameView();
         do {
-            String command = this.console.readString("Mueven las " + color + ": ");
+             String command = this.console.readString("Mueven las " + color + ": ");
             if(checkMove(command) == null){
                 System.out.println("Entro:" + command + ":");
                 final int origin = parseOrigin(command);
                 final int target = parseTarget(command);
-                error = playController.move(new Coordinate(origin / 10, origin % 10),
-                    new Coordinate(target / 10, target % 10));
+                error = playController.move(new Coordinate(origin/10-1, origin%10-1), new Coordinate(target/10-1, target%10-1));
+
                 if(error != null){
                     writeError(error);
                 }
@@ -52,7 +52,7 @@ public class CommandView extends SubView {
     private Error checkCoordinateInBoard(final String command){
         final int origin = parseOrigin(command);
         final int target = parseTarget(command);
-        if (!new Coordinate(origin / 10, origin % 10).isValid() || !new Coordinate(target / 10, target % 10).isValid()) {
+        if (!new Coordinate(origin / 10-1, origin % 10-1).isValid() || !new Coordinate(target / 10-1, target % 10-1).isValid()) {
             writeError(Error.OUT_COORDINATE);
             return Error.OUT_COORDINATE;
         }
@@ -74,7 +74,7 @@ public class CommandView extends SubView {
     }
 
     private void writeError(final Error error){
-        console.write("Error!!!" + error.name());
+        console.writeln("Error!!!" + error.name());
     }
 
 }
