@@ -38,13 +38,12 @@ public class Game {
 
 	public Error move(Coordinate origin, Coordinate target) {
 		assert origin != null && target != null;
-        final Error x = checkMovePeon(origin, target);
-        if(x != null)
-            return x;
-
-		this.board.move(origin, target);
-		this.turn.change();
-		return null;
+        final Error error = checkMovePeon(origin, target);
+        if(error == null){
+            this.board.move(origin, target);
+            this.turn.change();
+        }
+		return error;
 	}
 
     private Error checkMovePeon(Coordinate origin, Coordinate target){
