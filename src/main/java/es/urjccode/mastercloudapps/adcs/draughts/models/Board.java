@@ -44,7 +44,7 @@ class Board {
     boolean isEmpty(Coordinate coordinate) {
         return this.getSquare(coordinate).isEmpty();
     }
-    
+
     Color getColor(Coordinate coordinate) {
         return this.getSquare(coordinate).getColor();
     }
@@ -53,12 +53,17 @@ class Board {
         List<Piece> pieces = new ArrayList<Piece>();
         for (int i = 0; i < this.getDimension(); i++) {
             for (int j = 0; j < this.getDimension(); j++) {
-                pieces.add(this.squares[i][j].getPiece());
+                Piece piece = this.squares[i][j].getPiece();
+                if(isSameColor(color, piece))
+                    pieces.add(piece);
             }
         }
 		return pieces;
 	}
-    
+
+	private boolean isSameColor(Color color, Piece piece){
+        return piece != null && color == piece.getColor();
+    }
     int getDimension() {
 		return Board.DIMENSION;
 	}
