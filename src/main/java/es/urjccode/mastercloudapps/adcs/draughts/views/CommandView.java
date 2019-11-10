@@ -22,8 +22,8 @@ public class CommandView extends SubView {
             String command = this.console.readString("Mueven las " + color + ": ");
             if(checkMove(command) == null){
                 System.out.println("Entro:" + command + ":");
-                final int origin = Integer.parseInt(command.substring(0, 2));
-                final int target = Integer.parseInt(command.substring(3, 5));
+                final int origin = parseOrigin(command);
+                final int target = parseTarget(command);
                 error = playController.move(new Coordinate(origin / 10, origin % 10),
                     new Coordinate(target / 10, target % 10));
                 if(error != null){
@@ -37,28 +37,35 @@ public class CommandView extends SubView {
         }
     }
 
+    private int parseOrigin(final String command){
+        return Integer.parseInt(command.substring(0, 2));
+    }
+
+    private int parseTarget(final String command){
+        return Integer.parseInt(command.substring(3, 5));
+    }
     protected Error checkMove(final String command){
         Error error = checkFormatCoordinate(command);
         return error == null ? checkCoordinateInBoard(command):error;
     }
 
     private Error checkCoordinateInBoard(final String command){
-        final int origin = Integer.parseInt(command.substring(0, 2));
-        final int target = Integer.parseInt(command.substring(3, 5));
+        final int origin = parseOrigin(command);
+        final int target = parseTarget(command);
         if (!new Coordinate(origin / 10, origin % 10).isValid() || !new Coordinate(target / 10, target % 10).isValid()) {
             writeError(Error.OUT_COORDINATE);
             return Error.OUT_COORDINATE;
         }
         return null;
     }
-    protected Error checkFormatCoordinate(final String command){
+    private Error checkFormatCoordinate(final String command){
         try{
             if(command.length() > 6){
                 writeError(Error.WRONG_FORMAT);
                 return Error.WRONG_FORMAT;
             }
-            Integer.parseInt(command.substring(0, 2));
-            Integer.parseInt(command.substring(3, 5));
+            parseOrigin(command);
+            parseTarget(command);
             return null;
         }catch(final Exception ex){
             writeError(Error.WRONG_FORMAT);
