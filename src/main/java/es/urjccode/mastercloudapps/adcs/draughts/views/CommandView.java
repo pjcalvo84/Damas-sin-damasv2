@@ -20,17 +20,40 @@ public class CommandView extends SubView {
         GameView gameView = new GameView();
         do {
             String command = this.console.readString("Mueven las " + color + ": ");
-            int origin = Integer.parseInt(command.substring(0, 2));
-            int target = Integer.parseInt(command.substring(3, 5));
-            error = playController.move(new Coordinate(origin/10-1, origin%10-1), new Coordinate(target/10-1, target%10-1));
-            if (error != null){
-                console.writeln("Error!!!" + error.name());
+            if(checkFormatCoordenate(command) == null){
+                System.out.println("Entro:" + command + ":");
+                final int origin = Integer.parseInt(command.substring(0, 2));
+                final int target = Integer.parseInt(command.substring(3, 5));
+                error = playController.move(new Coordinate(origin / 10, origin % 10),
+                    new Coordinate(target / 10, target % 10));
+                if(error != null){
+                    writeError(error);
+                }
             }
             gameView.write(playController);
         } while (error != null);
         if (playController.isBlocked()){
             this.console.write(CommandView.MESSAGE);
         }
+    }
+
+    protected Error checkFormatCoordenate(final String command){
+        try{
+            if(command.length() > 6){
+                writeError(Error.WRONG_FORMAT);
+                return Error.WRONG_FORMAT;
+            }
+            Integer.parseInt(command.substring(0, 2));
+            Integer.parseInt(command.substring(3, 5));
+            return null;
+        }catch(final Exception ex){
+            writeError(Error.WRONG_FORMAT);
+            return Error.WRONG_FORMAT;
+        }
+    }
+
+    private void writeError(final Error error){
+        console.write("Error!!!" + error.name());
     }
 
 }
