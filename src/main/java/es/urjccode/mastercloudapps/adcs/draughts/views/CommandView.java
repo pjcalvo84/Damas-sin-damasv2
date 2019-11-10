@@ -20,7 +20,7 @@ public class CommandView extends SubView {
         GameView gameView = new GameView();
         do {
             String command = this.console.readString("Mueven las " + color + ": ");
-            if(checkFormatCoordenate(command) == null){
+            if(checkMove(command) == null){
                 System.out.println("Entro:" + command + ":");
                 final int origin = Integer.parseInt(command.substring(0, 2));
                 final int target = Integer.parseInt(command.substring(3, 5));
@@ -37,7 +37,21 @@ public class CommandView extends SubView {
         }
     }
 
-    protected Error checkFormatCoordenate(final String command){
+    protected Error checkMove(final String command){
+        Error error = checkFormatCoordinate(command);
+        return error == null ? checkCoordinateInBoard(command):error;
+    }
+
+    private Error checkCoordinateInBoard(final String command){
+        final int origin = Integer.parseInt(command.substring(0, 2));
+        final int target = Integer.parseInt(command.substring(3, 5));
+        if (!new Coordinate(origin / 10, origin % 10).isValid() || !new Coordinate(target / 10, target % 10).isValid()) {
+            writeError(Error.OUT_COORDINATE);
+            return Error.OUT_COORDINATE;
+        }
+        return null;
+    }
+    protected Error checkFormatCoordinate(final String command){
         try{
             if(command.length() > 6){
                 writeError(Error.WRONG_FORMAT);

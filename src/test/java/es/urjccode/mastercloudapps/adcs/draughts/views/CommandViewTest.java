@@ -1,5 +1,6 @@
 package es.urjccode.mastercloudapps.adcs.draughts.views;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import es.urjccode.mastercloudapps.adcs.draughts.controllers.PlayController;
 import es.urjccode.mastercloudapps.adcs.draughts.models.Color;
 import es.urjccode.mastercloudapps.adcs.draughts.models.Coordinate;
+import es.urjccode.mastercloudapps.adcs.draughts.models.Error;
 import es.urjccode.mastercloudapps.adcs.draughts.utils.Console;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,6 +41,14 @@ public class CommandViewTest {
         when(console.readString("Mueven las negras: ")).thenReturn("32.41\n");
         commandView.interact(playController);
         verify(playController).move(new Coordinate(3,2), new Coordinate(4, 1));
+    }
+
+    @Test
+    public void testInteractWithWrongEntrySize(){
+        when(playController.getColor()).thenReturn(Color.BLACK);
+        when(console.readString("Mueven las negras: ")).thenReturn("47.38").thenReturn("21.30\n");
+        commandView.interact(playController);
+        verify(console).write("Error!!!OUT_COORDINATE");
     }
 
 }

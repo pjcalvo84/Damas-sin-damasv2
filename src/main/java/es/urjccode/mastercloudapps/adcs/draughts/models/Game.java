@@ -47,9 +47,7 @@ public class Game {
 	}
 
     private Error checkMovePeon(Coordinate origin, Coordinate target){
-        if (!origin.isValid() || !target.isValid()) {
-            return Error.OUT_COORDINATE;
-        }
+
         if (board.isEmpty(origin)) {
             return Error.EMPTY_ORIGIN;
         }
