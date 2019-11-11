@@ -9,33 +9,65 @@ public class MovePeonValidator{
     }
 
     public Error validate(){
-        if(move.isEmpty(move.getOrigin())){
+        if(checkEmptyOrigin()){
             return Error.EMPTY_ORIGIN;
         }
-        final Color color = this.move.getColor(move.getOrigin());
-        if(this.move.getColor() != color){
+        if(checkOppositePiece()){
             return Error.OPPOSITE_PIECE;
         }
-        if(!move.getOrigin().isDiagonal(move.getTarget())){
+        if(checkMoveDiagonal()){
             return Error.NOT_DIAGONAL;
         }
-        final Piece piece = this.move.getPiece(move.getOrigin());
-        if(!piece.isAdvanced(move.getOrigin(), move.getTarget())){
+        if(checkAdvanceMove()){
             return Error.NOT_ADVANCED;
         }
-        if(move.getOrigin().diagonalDistance(move.getTarget()) >= 3){
+
+        if(checkBadDistance()){
             return Error.BAD_DISTANCE;
         }
-        if(!this.move.isEmpty(move.getTarget())){
+        if(checkEmptyTarget()){
             return Error.NOT_EMPTY_TARGET;
         }
+        if(checkEatingEmpty()){
+            return Error.EATING_EMPTY;
+        }
+        return null;
+    }
+
+    private boolean checkEatingEmpty(){
         if(move.getOrigin().diagonalDistance(move.getTarget()) == 2){
             final Coordinate between = move.getOrigin().betweenDiagonal(move.getTarget());
             if(this.move.getPiece(between) == null){
-                return Error.EATING_EMPTY;
+                return true;
             }
             this.move.remove(between);
         }
-        return null;
+        return false;
+    }
+
+    private boolean checkEmptyTarget(){
+        return !this.move.isEmpty(move.getTarget());
+    }
+
+    private boolean checkBadDistance(){
+        return(move.getOrigin().diagonalDistance(move.getTarget()) >= 3);
+    }
+
+    private boolean checkAdvanceMove(){
+        final Piece piece = this.move.getPiece(move.getOrigin());
+        return !piece.isAdvanced(move.getOrigin(), move.getTarget());
+    }
+
+    private boolean checkMoveDiagonal(){
+        return !move.getOrigin().isDiagonal(move.getTarget());
+    }
+
+    private boolean checkOppositePiece(){
+        final Color color = this.move.getColor(move.getOrigin());
+        return this.move.getColor() != color;
+    }
+
+    private boolean checkEmptyOrigin(){
+        return move.isEmpty(move.getOrigin());
     }
 }
