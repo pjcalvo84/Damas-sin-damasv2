@@ -47,38 +47,6 @@ public class Game{
         return error;
     }
 
-    private Error checkMovePeon(final Coordinate origin, final Coordinate target){
-
-        if(board.isEmpty(origin)){
-            return Error.EMPTY_ORIGIN;
-        }
-        final Color color = this.board.getColor(origin);
-        if(this.turn.getColor() != color){
-            return Error.OPPOSITE_PIECE;
-        }
-        if(!origin.isDiagonal(target)){
-            return Error.NOT_DIAGONAL;
-        }
-        final Piece piece = this.board.getPiece(origin);
-        if(!piece.isAdvanced(origin, target)){
-            return Error.NOT_ADVANCED;
-        }
-        if(origin.diagonalDistance(target) >= 3){
-            return Error.BAD_DISTANCE;
-        }
-        if(!this.board.isEmpty(target)){
-            return Error.NOT_EMPTY_TARGET;
-        }
-        if(origin.diagonalDistance(target) == 2){
-            final Coordinate between = origin.betweenDiagonal(target);
-            if(this.board.getPiece(between) == null){
-                return Error.EATING_EMPTY;
-            }
-            this.board.remove(between);
-        }
-        return null;
-    }
-
     public Color getColor(final Coordinate coordinate){
         return this.board.getColor(coordinate);
     }
