@@ -9,6 +9,10 @@ public class MovePeonValidator{
     }
 
     public Error validate(){
+
+        if(checkValidCoordinte()){
+            return Error.OUT_COORDINATE;
+        }
         if(checkEmptyOrigin()){
             return Error.EMPTY_ORIGIN;
         }
@@ -21,7 +25,6 @@ public class MovePeonValidator{
         if(checkAdvanceMove()){
             return Error.NOT_ADVANCED;
         }
-
         if(checkBadDistance()){
             return Error.BAD_DISTANCE;
         }
@@ -32,6 +35,10 @@ public class MovePeonValidator{
             return Error.EATING_EMPTY;
         }
         return null;
+    }
+
+    private boolean checkValidCoordinte(){
+        return !move.getOrigin().isValid() || !move.getTarget().isValid();
     }
 
     private boolean checkEatingEmpty(){
