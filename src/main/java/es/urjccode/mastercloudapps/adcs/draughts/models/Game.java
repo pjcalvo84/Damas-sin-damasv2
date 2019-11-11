@@ -1,76 +1,77 @@
 package es.urjccode.mastercloudapps.adcs.draughts.models;
 
-public class Game {
+public class Game{
 
-	private Board board;
+    private Board board;
 
-	private Turn turn;
+    private Turn turn;
 
-	public Game() {
-		this.turn = new Turn();
-		this.board = new Board();
-		for (int i = 0; i < this.board.getDimension(); i++) {
-			for (int j = 0; j < this.board.getDimension(); j++) {
-				Coordinate coordinate = new Coordinate(i, j);
-				Piece piece = this.getInitialPiece(coordinate);
-				if (piece != null) {
-					this.board.put(coordinate, piece);
-				}
-			}
-		}
-	}
+    public Game(){
+        this.turn = new Turn();
+        this.board = new Board();
+        for(int i = 0; i < this.board.getDimension(); i++){
+            for(int j = 0; j < this.board.getDimension(); j++){
+                final Coordinate coordinate = new Coordinate(i, j);
+                final Piece piece = this.getInitialPiece(coordinate);
+                if(piece != null){
+                    this.board.put(coordinate, piece);
+                }
+            }
+        }
+    }
 
-	private Piece getInitialPiece(Coordinate coordinate) {
-		if (coordinate.isBlack()) {
-			final int row = coordinate.getRow();
-			Color color = null;
-			if (row <= 2) {
-				color = Color.BLACK;
-			} else if (row >= 5) {
-				color = Color.WHITE;
-			}
-			if (color != null) {
-				return new Piece(color);
-			}
-		}
-		return null;
-	}
+    private Piece getInitialPiece(final Coordinate coordinate){
+        if(coordinate.isBlack()){
+            final int row = coordinate.getRow();
+            Color color = null;
+            if(row <= 2){
+                color = Color.BLACK;
+            }else if(row >= 5){
+                color = Color.WHITE;
+            }
+            if(color != null){
+                return new Piece(color);
+            }
+        }
+        return null;
+    }
 
-	public Error move(Coordinate origin, Coordinate target) {
-		assert origin != null && target != null;
-        final Error error = checkMovePeon(origin, target);
+    public Error move(final Coordinate origin, final Coordinate target){
+        assert origin != null && target != null;
+        final MovePeonValidator peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), origin, target));
+        final Error error = peonValidator.validate();
         if(error == null){
             this.board.move(origin, target);
             this.turn.change();
         }
-		return error;
-	}
+        return error;
+    }
 
-    private Error checkMovePeon(Coordinate origin, Coordinate target){
+    private Error checkMovePeon(final Coordinate origin, final Coordinate target){
 
-        if (board.isEmpty(origin)) {
+        if(board.isEmpty(origin)){
             return Error.EMPTY_ORIGIN;
         }
-        Color color = this.board.getColor(origin);
-        if (this.turn.getColor() != color) {
+        final Color color = this.board.getColor(origin);
+        if(this.turn.getColor() != color){
             return Error.OPPOSITE_PIECE;
         }
-        if (!origin.isDiagonal(target)) {
+        if(!origin.isDiagonal(target)){
             return Error.NOT_DIAGONAL;
         }
-        Piece piece = this.board.getPiece(origin);
-        if (!piece.isAdvanced(origin, target)) {
+        final Piece piece = this.board.getPiece(origin);
+        if(!piece.isAdvanced(origin, target)){
             return Error.NOT_ADVANCED;
         }
-        if (origin.diagonalDistance(target) >= 3) {
+        if(origin.diagonalDistance(target) >= 3){
             return Error.BAD_DISTANCE;
         }
-        if (!this.board.isEmpty(target)) {
+        if(!this.board.isEmpty(target)){
             return Error.NOT_EMPTY_TARGET;
         }
-        if (origin.diagonalDistance(target) == 2) {
-            Coordinate between = origin.betweenDiagonal(target);
-            if (this.board.getPiece(between) == null) {
+        if(origin.diagonalDistance(target) == 2){
+            final Coordinate between = origin.betweenDiagonal(target);
+            if(this.board.getPiece(between) == null){
                 return Error.EATING_EMPTY;
             }
             this.board.remove(between);
@@ -78,29 +79,29 @@ public class Game {
         return null;
     }
 
-    public Color getColor(Coordinate coordinate) {
-		return this.board.getColor(coordinate);
-	}
+    public Color getColor(final Coordinate coordinate){
+        return this.board.getColor(coordinate);
+    }
 
-	@Override
-	public String toString() {
-		return this.board + "\n" + this.turn;
-	}
+    @Override
+    public String toString(){
+        return this.board + "\n" + this.turn;
+    }
 
-	public Color getColor() {
-		return this.turn.getColor();
-	}
+    public Color getColor(){
+        return this.turn.getColor();
+    }
 
-	public Piece getPiece(Coordinate coordinate) {
-		return this.board.getPiece(coordinate);
-	}
+    public Piece getPiece(final Coordinate coordinate){
+        return this.board.getPiece(coordinate);
+    }
 
-	public boolean isBlocked() {
-		return this.board.getPieces(this.turn.getColor()).isEmpty();
-	}
+    public boolean isBlocked(){
+        return this.board.getPieces(this.turn.getColor()).isEmpty();
+    }
 
-	public int getDimension() {
-		return this.board.getDimension();
-	}
+    public int getDimension(){
+        return this.board.getDimension();
+    }
 
 }
