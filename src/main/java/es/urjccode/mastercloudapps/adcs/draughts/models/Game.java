@@ -41,8 +41,11 @@ public class Game{
     public Error move(final Coordinate origin, final Coordinate target){
         assert origin != null && target != null;
         final MovePeonValidator peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), origin, target));
-        final Error error = peonValidator.validate(true);
+        final Error error = peonValidator.validate();
         if(error == null){
+            if(peonValidator.validateEatingMove() == null){
+                this.board.remove(origin.betweenDiagonal(target));
+            }
             this.board.move(origin, target);
             this.turn.change();
         }
@@ -102,11 +105,11 @@ public class Game{
         }else{
             peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
                     new Coordinate(coordinate.getRow() + 1, coordinate.getColumn() - 1)));
-            error = peonValidator.validateEatingMove(false);
+            error = peonValidator.validateEatingMove();
             if(error != null){
                 peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
                         new Coordinate(coordinate.getRow() + 1, coordinate.getColumn() + 1)));
-                error = peonValidator.validateEatingMove(false);
+                error = peonValidator.validateEatingMove();
             }
         }
         return error;
