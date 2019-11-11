@@ -1,5 +1,7 @@
 package es.urjccode.mastercloudapps.adcs.draughts.models;
 
+import java.util.List;
+
 public class Game{
 
     private Board board;
@@ -72,4 +74,58 @@ public class Game{
         return this.board.getDimension();
     }
 
+    public boolean isPossibleMove(){
+        final List<Coordinate> coordinateList = this.board.getCoordinatesForColor(this.turn.getColor());
+        for(final Coordinate coordinate : coordinateList){
+            if(isPossibleNormalMove(coordinate) == null){
+                return true;
+            }
+            if(isPossibleEatingMove(coordinate) == null){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Error isPossibleNormalMove(final Coordinate coordinate){
+        MovePeonValidator peonValidator = null;
+        Error error = null;
+        if(this.turn.getColor() == Color.WHITE){
+            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                    new Coordinate(coordinate.getRow() + 1, coordinate.getColumn() - 1)));
+            error = peonValidator.validateNormalMove();
+            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                    new Coordinate(coordinate.getRow() + 1, coordinate.getColumn() + 1)));
+            error = peonValidator.validateNormalMove();
+        }else{
+            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                    new Coordinate(coordinate.getRow() - 1, coordinate.getColumn() - 1)));
+            error = peonValidator.validateNormalMove();
+            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                    new Coordinate(coordinate.getRow() - 1, coordinate.getColumn() + 1)));
+            error = peonValidator.validateNormalMove();
+        }
+        return error;
+    }
+
+    private Error isPossibleEatingMove(final Coordinate coordinate){
+        MovePeonValidator peonValidator = null;
+        Error error = null;
+        if(this.turn.getColor() == Color.WHITE){
+            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                    new Coordinate(coordinate.getRow() + 2, coordinate.getColumn() - 2)));
+            error = peonValidator.validateNormalMove();
+            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                    new Coordinate(coordinate.getRow() + 2, coordinate.getColumn() + 2)));
+            error = peonValidator.validateNormalMove();
+        }else{
+            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                    new Coordinate(coordinate.getRow() - 2, coordinate.getColumn() - 2)));
+            error = peonValidator.validateNormalMove();
+            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                    new Coordinate(coordinate.getRow() - 2, coordinate.getColumn() + 2)));
+            error = peonValidator.validateNormalMove();
+        }
+        return error;
+    }
 }

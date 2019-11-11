@@ -10,7 +10,7 @@ public class MovePeonValidator{
 
     public Error validate(){
 
-        if(checkValidCoordinte()){
+        if(checkValidCoordinate()){
             return Error.OUT_COORDINATE;
         }
         if(checkEmptyOrigin()){
@@ -37,7 +37,17 @@ public class MovePeonValidator{
         return null;
     }
 
-    private boolean checkValidCoordinte(){
+    public Error validateNormalMove(){
+        if(checkValidCoordinate()){
+            return Error.OUT_COORDINATE;
+        }
+        if(checkEmptyTarget()){
+            return Error.NOT_EMPTY_TARGET;
+        }
+        return null;
+    }
+
+    private boolean checkValidCoordinate(){
         return !move.getOrigin().isValid() || !move.getTarget().isValid();
     }
 
