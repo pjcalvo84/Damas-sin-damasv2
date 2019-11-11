@@ -8,7 +8,7 @@ public class MovePeonValidator{
         this.move = move;
     }
 
-    public Error validate(){
+    public Error validate(final boolean eatPiece){
 
         if(checkValidCoordinate()){
             return Error.OUT_COORDINATE;
@@ -31,7 +31,7 @@ public class MovePeonValidator{
         if(checkEmptyTarget()){
             return Error.NOT_EMPTY_TARGET;
         }
-        if(checkEatingEmpty()){
+        if(checkEatingEmpty(eatPiece)){
             return Error.EATING_EMPTY;
         }
         return null;
@@ -47,17 +47,27 @@ public class MovePeonValidator{
         return null;
     }
 
+    public Error validateEatingMove(final boolean eatPiece){
+        if(checkEatingEmpty(eatPiece)){
+            return Error.EATING_EMPTY;
+        }
+        return null;
+    }
+
     private boolean checkValidCoordinate(){
         return !move.getOrigin().isValid() || !move.getTarget().isValid();
     }
 
-    private boolean checkEatingEmpty(){
+    private boolean checkEatingEmpty(final boolean eatPiece){
+
         if(move.getOrigin().diagonalDistance(move.getTarget()) == 2){
             final Coordinate between = move.getOrigin().betweenDiagonal(move.getTarget());
             if(this.move.getPiece(between) == null){
                 return true;
             }
-            this.move.remove(between);
+            if(eatPiece){
+                this.move.remove(between);
+            }
         }
         return false;
     }

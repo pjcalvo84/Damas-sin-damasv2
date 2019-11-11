@@ -1,7 +1,9 @@
 package es.urjccode.mastercloudapps.adcs.draughts.models;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
@@ -132,4 +134,9 @@ public class GameTest{
                 this.advance(new Coordinate[][] {{new Coordinate(4, 7), new Coordinate(3, 8)},}));
     }
 
+    @Test
+    public void shouldReturnTrueWhenCheckIsPossibleMoveInInitGame(){
+        final Game game = new Game();
+        assertThat(game.isPossibleMove(), is(true));
+    }
 }

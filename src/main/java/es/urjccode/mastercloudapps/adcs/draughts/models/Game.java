@@ -41,7 +41,7 @@ public class Game{
     public Error move(final Coordinate origin, final Coordinate target){
         assert origin != null && target != null;
         final MovePeonValidator peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), origin, target));
-        final Error error = peonValidator.validate();
+        final Error error = peonValidator.validate(true);
         if(error == null){
             this.board.move(origin, target);
             this.turn.change();
@@ -67,7 +67,7 @@ public class Game{
     }
 
     public boolean isBlocked(){
-        return this.board.getPieces(this.turn.getColor()).isEmpty();
+        return this.board.getPieces(this.turn.getColor()).isEmpty() && !isPossibleMove();
     }
 
     public int getDimension(){
@@ -92,18 +92,22 @@ public class Game{
         Error error = null;
         if(this.turn.getColor() == Color.WHITE){
             peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
-                    new Coordinate(coordinate.getRow() + 1, coordinate.getColumn() - 1)));
-            error = peonValidator.validateNormalMove();
-            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
-                    new Coordinate(coordinate.getRow() + 1, coordinate.getColumn() + 1)));
-            error = peonValidator.validateNormalMove();
-        }else{
-            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
                     new Coordinate(coordinate.getRow() - 1, coordinate.getColumn() - 1)));
             error = peonValidator.validateNormalMove();
+            if(error != null){
+                peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                        new Coordinate(coordinate.getRow() - 1, coordinate.getColumn() + 1)));
+                error = peonValidator.validateNormalMove();
+            }
+        }else{
             peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
-                    new Coordinate(coordinate.getRow() - 1, coordinate.getColumn() + 1)));
-            error = peonValidator.validateNormalMove();
+                    new Coordinate(coordinate.getRow() + 1, coordinate.getColumn() - 1)));
+            error = peonValidator.validateEatingMove(false);
+            if(error != null){
+                peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                        new Coordinate(coordinate.getRow() + 1, coordinate.getColumn() + 1)));
+                error = peonValidator.validateEatingMove(false);
+            }
         }
         return error;
     }
@@ -115,16 +119,20 @@ public class Game{
             peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
                     new Coordinate(coordinate.getRow() + 2, coordinate.getColumn() - 2)));
             error = peonValidator.validateNormalMove();
-            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
-                    new Coordinate(coordinate.getRow() + 2, coordinate.getColumn() + 2)));
-            error = peonValidator.validateNormalMove();
+            if(error != null){
+                peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                        new Coordinate(coordinate.getRow() + 2, coordinate.getColumn() + 2)));
+                error = peonValidator.validateNormalMove();
+            }
         }else{
             peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
                     new Coordinate(coordinate.getRow() - 2, coordinate.getColumn() - 2)));
             error = peonValidator.validateNormalMove();
-            peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
-                    new Coordinate(coordinate.getRow() - 2, coordinate.getColumn() + 2)));
-            error = peonValidator.validateNormalMove();
+            if(error != null){
+                peonValidator = new MovePeonValidator(new Move(board, turn.getColor(), coordinate,
+                        new Coordinate(coordinate.getRow() - 2, coordinate.getColumn() + 2)));
+                error = peonValidator.validateNormalMove();
+            }
         }
         return error;
     }
